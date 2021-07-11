@@ -16,11 +16,11 @@ func NewSyscallCounter() *SyscallCounter {
 	return &sc
 }
 
-func (sc SyscallCounter) Inc(code uint64) {
+func (sc *SyscallCounter) Inc(code uint64) {
 	sc.Counts[code] = sc.Counts[code] + 1
 }
 
-func (sc SyscallCounter) Print() {
+func (sc *SyscallCounter) Print() {
 	var total uint64
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 4, ' ', tabwriter.AlignRight|tabwriter.Debug)
 	fmt.Fprintf(w, "SYSCALL (CODE)\tCOUNT\n")
