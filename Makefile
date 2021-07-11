@@ -20,8 +20,13 @@ tag:
 push:
 	docker push $(namespace)$(tag)
 
+run:
+	docker run --rm -ti --entrypoint /bin/bash -t $(tag)
+
 clean:
 	rm -rf bin
 
+generate:
+	python3 build/generate.py > pkg/syscall/syscalls_linux.go
 
-.PHONY: clean build tag push
+.PHONY: clean build tag push run generate
