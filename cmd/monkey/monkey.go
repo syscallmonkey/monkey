@@ -35,7 +35,7 @@ func main() {
 	}
 
 	pid := cmd.Process.Pid
-	entry := true
+	incall := false
 	counter := sc.NewSyscallCounter()
 
 	var regs syscall.PtraceRegs
@@ -43,18 +43,18 @@ func main() {
 	for {
 		err = syscall.PtraceGetRegs(pid, &regs)
 		if err != nil {
+			fmt.Printf(" = ?\n")
 			break
 		}
 		code := regs.Orig_rax
 		name := sc.GetSyscallName(code)
-		if entry {
-			fmt.Printf("%s() == ", name)
+		if incall {
+			fmt.Printf("%s()", name)
 			counter.Inc(code)
 		} else {
-			return_val := regs.Orig_rax
-			fmt.Printf("%d\n", return_val)
+			fmt.Printf(" = %d\n", regs.Rax)
 		}
-		entry = !entry
+		incall = !incall
 
 		err = syscall.PtraceSyscall(pid, 0)
 		if err != nil {
