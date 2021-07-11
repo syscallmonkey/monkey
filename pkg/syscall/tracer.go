@@ -6,7 +6,6 @@ import (
 )
 
 type Tracer struct {
-	Incall  bool
 	Pid     int
 	Counter *SyscallCounter
 }
@@ -20,23 +19,18 @@ func NewTracer(pid int) *Tracer {
 }
 
 func (t *Tracer) Loop() {
+	var regs syscall.PtraceRegs
+	var err error
+	var code uint64
+	var incall bool
+	// handle the first syscall on its way out - the execve
+	syscall.PtraceGetRegs(t.Pid, &regs)
+	code = regs.Orig_rax
+	t.Counter.Inc(code)
+	fmt.Printf("%s() = %d", GetSyscallName(code), regs.Rax)
+	incall = true
+	// handle all the other syscalls
 	for {
-		var regs syscall.PtraceRegs
-		err := syscall.PtraceGetRegs(t.Pid, &regs)
-		if err != nil {
-			fmt.Printf(" = ?\n")
-			break
-		}
-		code := regs.Orig_rax
-		name := GetSyscallName(code)
-		if t.Incall {
-			fmt.Printf("%s()", name)
-			t.Counter.Inc(code)
-		} else {
-			fmt.Printf(" = %d\n", regs.Rax)
-		}
-		t.Incall = !t.Incall
-
 		err = syscall.PtraceSyscall(t.Pid, 0)
 		if err != nil {
 			panic(err)
@@ -45,5 +39,18 @@ func (t *Tracer) Loop() {
 		if err != nil {
 			panic(err)
 		}
+		err = syscall.PtraceGetRegs(t.Pid, &regs)
+		if err != nil {
+			fmt.Printf(" = ?\n")
+			break
+		}
+		if incall {
+			code = regs.Orig_rax
+			fmt.Printf("%s()", GetSyscallName(code))
+			t.Counter.Inc(code)
+		} else {
+			fmt.Printf(" = %d\n", regs.Rax)
+		}
+		incall = !incall
 	}
 }
