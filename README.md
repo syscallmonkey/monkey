@@ -4,7 +4,7 @@ Chaos Engineering tool for introducing failure into syscalls
 
 ## TL;DR
 
-`Syscall Monkey` is like [`strace`](https://man7.org/linux/man-pages/man1/strace.1.html) on steroids:
+`Syscall Monkey` is like [`strace`](https://man7.org/linux/man-pages/man1/strace.1.html) for fiddling:
 
 - attach and detach processes using [`ptrace`](https://man7.org/linux/man-pages/man2/ptrace.2.html) (Linux only)
 - trace their [`syscalls`](https://man7.org/linux/man-pages/man2/syscalls.2.html) - names, arguments, return values
