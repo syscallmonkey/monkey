@@ -21,13 +21,12 @@ func NewTracer(pid int) *Tracer {
 func (t *Tracer) Loop() {
 	var regs syscall.PtraceRegs
 	var err error
-	var code uint64
 	var incall bool
 	// handle the first syscall on its way out - the execve
 	syscall.PtraceGetRegs(t.Pid, &regs)
-	code = regs.Orig_rax
-	t.Counter.Inc(code)
-	fmt.Printf("%s() = %d", GetSyscallName(code), regs.Rax)
+	t.Counter.Inc(regs.Orig_rax)
+	PrintSyscall(regs)
+	fmt.Printf(" = %d\n", regs.Rax)
 	incall = true
 	// handle all the other syscalls
 	for {
@@ -45,11 +44,10 @@ func (t *Tracer) Loop() {
 			break
 		}
 		if incall {
-			code = regs.Orig_rax
-			fmt.Printf("%s()", GetSyscallName(code))
-			t.Counter.Inc(code)
+			PrintSyscall(regs)
+			t.Counter.Inc(regs.Orig_rax)
 		} else {
-			fmt.Printf(" = %d\n", regs.Rax)
+			fmt.Printf(" = %d\n", int(regs.Rax))
 		}
 		incall = !incall
 	}
