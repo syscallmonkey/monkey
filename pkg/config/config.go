@@ -14,6 +14,8 @@ type SyscallMonkeyConfig struct {
 	PrintSummary bool   `short:"C" long:"summary" description:"Show verbose debug information"`
 	TrailingArgs []string
 	OutputFile   *os.File
+	Version      string
+	Build        string
 }
 
 func ParseCommandLineFlags(args []string) *SyscallMonkeyConfig {
