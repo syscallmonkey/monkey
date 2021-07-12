@@ -50,6 +50,15 @@ func main() {
 		}
 	}
 
+	// read the config, if specified
+	if config.ConfigPath != "" {
+		scenario, err := smc.ParseScenario(config.ConfigPath)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("%+v\n", scenario)
+	}
+
 	tracer := sc.NewTracer(config.AttachPid, config.OutputFile)
 
 	// trace the program until it finishes
