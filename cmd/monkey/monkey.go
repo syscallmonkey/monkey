@@ -34,6 +34,10 @@ func main() {
 	fmt.Fprintf(config.OutputFile, "Version %s, build %s\n", Version, Build)
 
 	if config.AttachPid == 0 {
+		if len(config.TrailingArgs) == 0 {
+			fmt.Fprintf(config.OutputFile, "Error: need either -p or a command to run\n")
+			os.Exit(1)
+		}
 		pid, err := sc.StartTracee(config.TrailingArgs)
 		if err != nil {
 			panic(err)
