@@ -1,0 +1,24 @@
+rules:
+  - name: block the nanosleep most of the time
+    probability: 0.77
+    match:
+      name: nanosleep
+      code: 123
+      args:
+        - number: 0
+          int: -1
+        - number: 1
+          uint: 12328
+        - number: 2
+          string: "lol"
+    delay:
+      before: 100ms
+      after: 10ms
+    modify:
+      block: true
+      return: 0
+      args:
+        - number: 1
+          uint: 12328
+        - number: 2
+          string: "lol"
