@@ -44,6 +44,18 @@ for elem in data.values():
     print(f"  {code} : {{{argument_types}}},")
 print("}")
 
+print("var codeToArgNames = map[uint64][]string{")
+for elem in data.values():
+    code, name, entry_point, impl, arguments = elem
+    if not arguments:
+      continue
+    argument_types = ", ".join([
+      "\"" + arg[1] + "\""
+      for arg in arguments
+    ])
+    print(f"  {code} : {{{argument_types}}},")
+print("}")
+
 print('''
 func GetSyscallName(code uint64) string {
   return codeToName[code]
@@ -51,6 +63,10 @@ func GetSyscallName(code uint64) string {
 
 func GetSyscallArgumentTypes(code uint64) []string {
   return codeToArgTypes[code]
+}
+
+func GetSyscallArgumentNames(code uint64) []string {
+  return codeToArgNames[code]
 }
 
 ''')
