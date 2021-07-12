@@ -21,7 +21,7 @@ push:
 	docker push $(namespace)$(tag)
 
 run:
-	docker run --rm -ti --entrypoint /bin/bash -t $(tag)
+	docker run --rm -ti --entrypoint /bin/bash --cap-add SYS_PTRACE -t $(tag)
 
 clean:
 	rm -rf bin
