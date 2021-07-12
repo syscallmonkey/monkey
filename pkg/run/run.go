@@ -45,7 +45,7 @@ func RunTracer(config *smc.SyscallMonkeyConfig, manipulator sc.SyscallManipulato
 
 	// read the config, if specified
 	if config.ConfigPath != "" {
-		scenario, err := smc.ParseScenario(config.ConfigPath)
+		scenario, err := smc.ParseScenarioFromFile(config.ConfigPath)
 		if err != nil {
 			panic(err)
 		}

@@ -37,17 +37,23 @@ type SyscallRuleArgs struct {
 	String string `yaml:"string,omitempty"`
 }
 
-func ParseScenario(path string) (*Scenario, error) {
+func ParseScenario(data []byte) (*Scenario, error) {
 	s := Scenario{}
+	err := yaml.Unmarshal(data, &s)
+	if err != nil {
+		return nil, err
+	}
+	return &s, nil
+}
 
+func ParseScenarioFromFile(path string) (*Scenario, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
-	err = yaml.Unmarshal(data, &s)
+	s, err := ParseScenario(data)
 	if err != nil {
 		return nil, err
 	}
-
-	return &s, nil
+	return s, nil
 }
