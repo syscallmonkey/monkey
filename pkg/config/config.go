@@ -13,7 +13,7 @@ type SyscallMonkeyConfig struct {
 	OutputPath   string `short:"o" long:"output" description:"Write the tracing output to the file (instead of stdout)"`
 	PrintSummary bool   `short:"C" long:"summary" description:"Show verbose debug information"`
 	TrailingArgs []string
-	OutputFile   os.File
+	OutputFile   *os.File
 }
 
 func ParseCommandLineFlags(args []string) *SyscallMonkeyConfig {

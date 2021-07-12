@@ -15,12 +15,26 @@ var (
 )
 
 func main() {
-	fmt.Printf("Version %s, build %s\n", Version, Build)
 
+	// parse the flags
 	config := smc.ParseCommandLineFlags(os.Args[1:])
 
+	// figure out where to direct the output
+	config.OutputFile = os.Stdout
+	if config.OutputPath != "" {
+		f, err := os.OpenFile(config.OutputPath, os.O_CREATE|os.O_WRONLY, 0660)
+		if err != nil {
+			panic(err)
+		}
+		defer f.Close()
+		config.OutputFile = f
+	}
+
+	// just a reminder
+	fmt.Fprintf(config.OutputFile, "Version %s, build %s\n", Version, Build)
+
 	if config.AttachPid == 0 {
-		pid, err := sc.StartTracee(os.Args)
+		pid, err := sc.StartTracee(config.TrailingArgs)
 		if err != nil {
 			panic(err)
 		}
@@ -32,7 +46,12 @@ func main() {
 		}
 	}
 
-	tracer := sc.NewTracer(config.AttachPid)
+	tracer := sc.NewTracer(config.AttachPid, config.OutputFile)
+
+	// trace the program until it finishes
 	tracer.Loop()
-	tracer.Counter.Print()
+
+	if config.PrintSummary {
+		tracer.Counter.Print(config.OutputFile)
+	}
 }

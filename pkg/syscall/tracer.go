@@ -2,17 +2,20 @@ package syscall
 
 import (
 	"fmt"
+	"io"
 	"syscall"
 )
 
 type Tracer struct {
 	Pid     int
 	Counter *SyscallCounter
+	Out     io.Writer
 }
 
-func NewTracer(pid int) *Tracer {
+func NewTracer(pid int, out io.Writer) *Tracer {
 	t := Tracer{
 		Pid:     pid,
+		Out:     out,
 		Counter: NewSyscallCounter(),
 	}
 	return &t
@@ -38,7 +41,7 @@ func (t *Tracer) Loop() {
 		}
 		err = syscall.PtraceGetRegs(t.Pid, &regs)
 		if err != nil {
-			fmt.Printf(" = ?\n")
+			fmt.Fprintf(t.Out, " = ?\n")
 			break
 		}
 		if entry {
@@ -51,10 +54,10 @@ func (t *Tracer) Loop() {
 }
 
 func (t *Tracer) HandleSyscallEntry(regs syscall.PtraceRegs) {
-	fmt.Print(FormatSyscallEntry(t.Pid, regs))
+	fmt.Fprintf(t.Out, FormatSyscallEntry(t.Pid, regs))
 }
 
 func (t *Tracer) HandleSyscallExit(regs syscall.PtraceRegs) {
 	t.Counter.Inc(regs.Orig_rax)
-	fmt.Print(FormatSyscallExit(regs))
+	fmt.Fprintf(t.Out, FormatSyscallExit(regs))
 }

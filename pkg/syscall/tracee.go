@@ -9,7 +9,7 @@ import (
 
 // StartTracee starts a new process in Ptrace mode, and awaits the first reutrn
 func StartTracee(args []string) (int, error) {
-	cmd := exec.Command(args[1], args[2:]...)
+	cmd := exec.Command(args[0], args[1:]...)
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
