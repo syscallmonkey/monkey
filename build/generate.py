@@ -67,6 +67,4 @@ func GetSyscallArgumentTypes(code uint64) []string {
 
 func GetSyscallArgumentNames(code uint64) []string {
   return codeToArgNames[code]
-}
-
-''')
+}''')
