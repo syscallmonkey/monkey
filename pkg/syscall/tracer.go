@@ -13,11 +13,12 @@ type Tracer struct {
 	Manipulator SyscallManipulator
 }
 
-func NewTracer(pid int, out io.Writer) *Tracer {
+func NewTracer(pid int, out io.Writer, manipulator SyscallManipulator) *Tracer {
 	t := Tracer{
-		Pid:     pid,
-		Out:     out,
-		Counter: NewSyscallCounter(),
+		Pid:         pid,
+		Out:         out,
+		Manipulator: manipulator,
+		Counter:     NewSyscallCounter(),
 	}
 	return &t
 }

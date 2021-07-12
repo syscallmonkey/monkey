@@ -51,6 +51,7 @@ func main() {
 	}
 
 	// read the config, if specified
+	var manipulator sc.SyscallManipulator
 	if config.ConfigPath != "" {
 		scenario, err := smc.ParseScenario(config.ConfigPath)
 		if err != nil {
@@ -59,7 +60,7 @@ func main() {
 		fmt.Printf("%+v\n", scenario)
 	}
 
-	tracer := sc.NewTracer(config.AttachPid, config.OutputFile)
+	tracer := sc.NewTracer(config.AttachPid, config.OutputFile, manipulator)
 
 	// trace the program until it finishes
 	tracer.Loop()
