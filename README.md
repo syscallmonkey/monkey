@@ -23,7 +23,7 @@ Chaos Engineering tool for introducing failure into syscalls
 - [x] ability to attach to a running process
 - [ ] handle tracee's signals
 - [ ] ability to find processes by PID, name, or ALL (attach to all processes inside of a container)
-- [ ] add hooks, so that you can implement your own logic and build your own strace
+- [x] add hooks, so that you can implement your own logic and build your own strace
 - [ ] handle yaml config files
 - [ ] make sure it works in a container as a side car
 - [ ] add an option of HTTP server with an interface to update the stats ()
