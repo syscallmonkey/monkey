@@ -20,8 +20,8 @@ Chaos Engineering tool for introducing failure into syscalls
   - [ ] print nicely `umode_t` modes
   - [ ] detach on Ctrl-C
 - [x] command line flags handling - drop-in subset for `strace`
+- [x] ability to attach to a running process
 - [ ] handle tracee's signals
-- [ ] ability to attach to a running process
 - [ ] ability to find processes by PID, name, or ALL (attach to all processes inside of a container)
 - [ ] add hooks, so that you can implement your own logic and build your own strace
 - [ ] handle yaml config files
