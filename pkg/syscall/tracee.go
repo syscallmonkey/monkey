@@ -25,3 +25,8 @@ func StartTracee(args []string) (int, error) {
 
 	return cmd.Process.Pid, nil
 }
+
+// AttachToProcess attaches to an arbitrary process
+func AttachToProcess(pid int) error {
+	return syscall.PtraceAttach(pid)
+}
