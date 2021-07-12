@@ -47,7 +47,13 @@ func (t *Tracer) Loop() {
 			PrintSyscall(regs)
 			t.Counter.Inc(regs.Orig_rax)
 		} else {
-			fmt.Printf(" = %d\n", int(regs.Rax))
+			ret := int64(regs.Rax)
+			if ret >= 0 {
+				fmt.Printf(" = %d\n", ret)
+			} else {
+				ret = -ret
+				fmt.Printf(" = -1 (errno %d: %s)\n", ret, syscall.Errno(ret).Error())
+			}
 		}
 		incall = !incall
 	}
