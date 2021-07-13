@@ -2,7 +2,6 @@
 
 Chaos Engineering tool for tampering with syscalls.
 
-
 ## TL;DR
 
 `Syscall Monkey` is like [`strace`](https://man7.org/linux/man-pages/man1/strace.1.html) for fiddling:
@@ -35,13 +34,35 @@ daemon
 
 See [more examples here](./examples).
 
+# Table of contents
+- [Syscall monkey](#syscall-monkey)
+  - [TL;DR](#tldr)
+  - [Quick example](#quick-example)
+- [Table of contents](#table-of-contents)
+  - [Tutorials](#tutorials)
+  - [Installation](#installation)
+    - [Binary](#binary)
+    - [Docker container](#docker-container)
+    - [Compatibility](#compatibility)
+  - [TODO](#todo)
+
+
 ## Tutorials
 
 TODO
 
 
 ## Installation
-
+- [Syscall monkey](#syscall-monkey)
+  - [TL;DR](#tldr)
+  - [Quick example](#quick-example)
+- [Table of contents](#table-of-contents)
+  - [Tutorials](#tutorials)
+  - [Installation](#installation)
+    - [Binary](#binary)
+    - [Docker container](#docker-container)
+    - [Compatibility](#compatibility)
+  - [TODO](#todo)
 ### Binary
 
 You can build the binary from the source:
