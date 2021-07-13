@@ -50,6 +50,9 @@ func RunTracer(config *smc.SyscallMonkeyConfig, manipulator sc.SyscallManipulato
 			panic(err)
 		}
 		fmt.Printf("%+v\n", scenario)
+		manipulator = &sc.ScenarioManipulator{
+			Rules: scenario.Rules,
+		}
 	}
 
 	tracer := sc.NewTracer(config.AttachPid, config.OutputFile, manipulator)
