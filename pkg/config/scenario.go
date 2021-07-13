@@ -7,7 +7,7 @@ import (
 )
 
 type Scenario struct {
-	Rules []SyscallRule
+	Rules []*SyscallRule
 }
 type SyscallRule struct {
 	Name        string             `yaml:"name"`
@@ -17,18 +17,18 @@ type SyscallRule struct {
 	Modify      *SyscallRuleModify `yaml:"modify"`
 }
 type SyscallRuleMatch struct {
-	Name string            `yaml:"name"`
-	Code *uint64           `yaml:"code"`
-	Args []SyscallRuleArgs `yaml:"args"`
+	Name string             `yaml:"name"`
+	Code *uint64            `yaml:"code"`
+	Args []*SyscallRuleArgs `yaml:"args"`
 }
 type SyscallRuleDelay struct {
 	Before *string `yaml:"before"`
 	After  *string `yaml:"after"`
 }
 type SyscallRuleModify struct {
-	Block  *bool             `yaml:"block"`
-	Return *int              `yaml:"return"`
-	Args   []SyscallRuleArgs `yaml:"args"`
+	Block  *bool              `yaml:"block"`
+	Return *int               `yaml:"return"`
+	Args   []*SyscallRuleArgs `yaml:"args"`
 }
 type SyscallRuleArgs struct {
 	Number int    `yaml:"number"`

@@ -52,7 +52,6 @@ func RunTracer(config *smc.SyscallMonkeyConfig, manipulator sc.SyscallManipulato
 		if err != nil {
 			panic(err)
 		}
-		fmt.Printf("%+v\n", scenario)
 		manipulator = &sc.ScenarioManipulator{
 			Scenario: scenario,
 		}

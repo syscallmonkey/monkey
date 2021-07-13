@@ -18,18 +18,17 @@ func (sm *ScenarioManipulator) HandleEntry(state SyscallState) SyscallState {
 	// match the rules and store for the Exit
 	sm.CurrentRules = []*config.SyscallRule{}
 	for _, rule := range sm.Scenario.Rules {
-		if sm.MatchRule(&state, &rule) {
+		if sm.MatchRule(&state, rule) {
 			// probability of applying the rule
+			rand.Seed(time.Now().UTC().UnixNano())
 			if rule.Probability != nil && rand.Float64() > *rule.Probability {
 				continue
 			}
-			sm.CurrentRules = append(sm.CurrentRules, &rule)
+			sm.CurrentRules = append(sm.CurrentRules, rule)
 		}
 	}
 	// execute the 'before syscall' part of the rules
 	for _, rule := range sm.CurrentRules {
-
-		fmt.Printf("\n\nExecuting rule '%s'\n\n", rule.Name)
 
 		// delay
 		if rule.Delay != nil && rule.Delay.Before != nil {
