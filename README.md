@@ -107,21 +107,21 @@ import (
 	"github.com/seeker89/syscall-monkey/pkg/run"
 )
 
-// ExampleManipulator
+// ExampleManipulator does some random stuff, to illustrate what you can do
 type ExampleManipulator struct {
 	Count int
 }
 
 func (sm *ExampleManipulator) HandleEntry(state SyscallState) SyscallState {
 	// change syscall to always be getpid
-    state.SyscallCode = 107
-    // and also count the entries
+	state.SyscallCode = 107
+	// and also count the entries
 	sm.Count++
 	return state
 }
 
 func (sm *ExampleManipulator) HandleExit(returnValue uint64) uint64 {
-    // change the syscall return value on every other call
+	// change the syscall return value on every other call
 	if sm.Count%2 == 0 {
 		return 0
 	}
@@ -131,8 +131,8 @@ func (sm *ExampleManipulator) HandleExit(returnValue uint64) uint64 {
 func main() {
 	// parse the config (or hardcode them, if you'd like)
 	config := config.ParseCommandLineFlags(os.Args[1:])
-    // implement your manipulator
-    m := ExampleManipulator{}
+	// implement your manipulator
+	m := ExampleManipulator{}
 	// run the tracer
 	run.RunTracer(config, &m)
 }
