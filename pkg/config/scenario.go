@@ -18,16 +18,16 @@ type SyscallRule struct {
 }
 type SyscallRuleMatch struct {
 	Name string            `yaml:"name"`
-	Code int               `yaml:"code"`
+	Code *uint64           `yaml:"code"`
 	Args []SyscallRuleArgs `yaml:"args"`
 }
 type SyscallRuleDelay struct {
-	Before string `yaml:"before"`
-	After  string `yaml:"after"`
+	Before *string `yaml:"before"`
+	After  *string `yaml:"after"`
 }
 type SyscallRuleModify struct {
-	Block  bool              `yaml:"block"`
-	Return int               `yaml:"return"`
+	Block  *bool             `yaml:"block"`
+	Return *int              `yaml:"return"`
 	Args   []SyscallRuleArgs `yaml:"args"`
 }
 type SyscallRuleArgs struct {
