@@ -27,6 +27,8 @@ func (t *Tracer) Loop() {
 	var regs syscall.PtraceRegs
 	var err error
 	var entry bool = true
+	// set the tracing options
+	// TODO https://man7.org/linux/man-pages/man2/ptrace.2.html
 	// handle the first syscall on its way out - the execve
 	syscall.PtraceGetRegs(t.Pid, &regs)
 	t.HandleSyscallEntry(regs)
