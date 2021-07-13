@@ -11,7 +11,7 @@ type Scenario struct {
 }
 type SyscallRule struct {
 	Name        string             `yaml:"name"`
-	Probability float64            `yaml:"probability"`
+	Probability *float64           `yaml:"probability"`
 	Match       SyscallRuleMatch   `yaml:"match"`
 	Delay       *SyscallRuleDelay  `yaml:"delay"`
 	Modify      *SyscallRuleModify `yaml:"modify"`

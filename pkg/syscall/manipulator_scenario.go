@@ -2,6 +2,7 @@ package syscall
 
 import (
 	"fmt"
+	"math/rand"
 	"strings"
 	"time"
 
@@ -14,11 +15,14 @@ type ScenarioManipulator struct {
 }
 
 func (sm *ScenarioManipulator) HandleEntry(state SyscallState) SyscallState {
-	// match the rules
+	// match the rules and store for the Exit
 	sm.CurrentRules = []*config.SyscallRule{}
 	for _, rule := range sm.Scenario.Rules {
 		if sm.MatchRule(&state, &rule) {
-			// TODO probability of applying the rule
+			// probability of applying the rule
+			if rule.Probability != nil && rand.Float64() > *rule.Probability {
+				continue
+			}
 			sm.CurrentRules = append(sm.CurrentRules, &rule)
 		}
 	}
