@@ -33,6 +33,8 @@ root@f34cc94a6b6d:/# monkey -s -c /examples/getuid-user1.yml whoami
 daemon
 ```
 
+See [more examples here](./examples).
+
 ## Tutorials
 
 TODO
