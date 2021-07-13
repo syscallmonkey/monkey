@@ -62,26 +62,20 @@ func (t *Tracer) HandleSyscallEntry(regs syscall.PtraceRegs) {
 	if t.Manipulator != nil {
 		code := ReadSyscallArg(regs, -1)
 		state := SyscallState{
-			Arg0:        ReadSyscallArg(regs, 0),
-			Arg1:        ReadSyscallArg(regs, 1),
-			Arg2:        ReadSyscallArg(regs, 2),
-			Arg3:        ReadSyscallArg(regs, 3),
-			Arg4:        ReadSyscallArg(regs, 4),
-			Arg5:        ReadSyscallArg(regs, 5),
 			SyscallCode: code,
 			SyscallName: GetSyscallName(code),
 			Pid:         t.Pid,
+		}
+		for i := range state.Args {
+			state.Args[i] = ReadSyscallArg(regs, i)
 		}
 		newState := t.Manipulator.HandleEntry(state)
 		if newState != state {
 			newRegs := regs
 			WriteSyscallArg(&newRegs, -1, newState.SyscallCode)
-			WriteSyscallArg(&newRegs, 0, newState.Arg0)
-			WriteSyscallArg(&newRegs, 1, newState.Arg1)
-			WriteSyscallArg(&newRegs, 2, newState.Arg2)
-			WriteSyscallArg(&newRegs, 3, newState.Arg3)
-			WriteSyscallArg(&newRegs, 4, newState.Arg4)
-			WriteSyscallArg(&newRegs, 5, newState.Arg5)
+			for i := range newState.Args {
+				WriteSyscallArg(&newRegs, i, newState.Args[i])
+			}
 			syscall.PtraceSetRegs(t.Pid, &newRegs)
 		}
 	}
