@@ -31,6 +31,8 @@ func (sm *ScenarioManipulator) HandleEntry(state SyscallState) SyscallState {
 		if rule.Delay != nil && rule.Delay.Before != nil {
 			if duration, err := time.ParseDuration(*rule.Delay.Before); err == nil {
 				time.Sleep(duration)
+			} else {
+				fmt.Printf("\n\nError sleeping '%s'\n\n", err)
 			}
 		}
 
@@ -50,7 +52,7 @@ func (sm *ScenarioManipulator) MatchRule(state *SyscallState, rule *config.Sysca
 	if rule.Match.Code != nil && *rule.Match.Code == state.SyscallCode {
 		match = true
 	}
-	if rule.Match.Name != "" && strings.Contains(rule.Match.Name, state.SyscallName) {
+	if rule.Match.Name != "" && strings.Contains(state.SyscallName, rule.Match.Name) {
 		match = true
 	}
 
@@ -67,6 +69,8 @@ func (sm *ScenarioManipulator) HandleExit(returnValue uint64) uint64 {
 		if rule.Delay != nil && rule.Delay.After != nil {
 			if duration, err := time.ParseDuration(*rule.Delay.After); err == nil {
 				time.Sleep(duration)
+			} else {
+				fmt.Printf("\n\nError sleeping '%s'\n\n", err)
 			}
 		}
 	}

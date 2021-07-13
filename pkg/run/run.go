@@ -2,6 +2,7 @@ package run
 
 import (
 	"fmt"
+	"io"
 	"os"
 
 	smc "github.com/seeker89/syscall-monkey/pkg/config"
@@ -12,7 +13,9 @@ import (
 func RunTracer(config *smc.SyscallMonkeyConfig, manipulator sc.SyscallManipulator) {
 
 	// figure out where to direct the output
-	if config.OutputFile == nil && config.OutputPath != "" {
+	if config.Silent {
+		config.OutputFile = io.Discard
+	} else if config.OutputFile == nil && config.OutputPath != "" {
 		f, err := os.OpenFile(config.OutputPath, os.O_CREATE|os.O_WRONLY, 0660)
 		if err != nil {
 			panic(err)

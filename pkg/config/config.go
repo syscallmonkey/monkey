@@ -1,7 +1,7 @@
 package config
 
 import (
-	"os"
+	"io"
 
 	"github.com/jessevdk/go-flags"
 )
@@ -12,8 +12,9 @@ type SyscallMonkeyConfig struct {
 	ConfigPath   string `short:"c" long:"config" description:"Configuration file with desired scenario"`
 	OutputPath   string `short:"o" long:"output" description:"Write the tracing output to the file (instead of stdout)"`
 	PrintSummary bool   `short:"C" long:"summary" description:"Show verbose debug information"`
+	Silent       bool   `short:"s" long:"silent" description:"Show verbose debug information"`
 	TrailingArgs []string
-	OutputFile   *os.File
+	OutputFile   io.Writer
 	Version      string
 	Build        string
 }
