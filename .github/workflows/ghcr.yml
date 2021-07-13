@@ -8,12 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build the Docker image
-        run: |
-          make build
-          docker images
+      - name: Get tag
+        id: tag
+        uses: dawidd6/action-get-tag@v1
       - name: Login to ghcr.io
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u seeker89 --password-stdin
-          make tag
-          make push
+      - name: Build the Docker image
+        run: |
+          version=${{steps.tag.outputs.tag}} make build
+          docker images
+      - name: Push to ghcr.io
+        run: |
+          version=${{steps.tag.outputs.tag}} make tag
+          version=${{steps.tag.outputs.tag}} make push
