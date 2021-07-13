@@ -1,0 +1,11 @@
+# root@17f210bdab84:/# cat /etc/passwd
+# root:x:0:0:root:/root:/bin/bash
+# daemon:x:1:1:daemon:/usr/sbin:/usr/s
+# bin:x:2:2:bin:/bin:/usr/sbin/nologin
+
+rules:
+  - name: switch geteuid to return daemon
+    match:
+      name: geteuid
+    modify:
+      return: 1
