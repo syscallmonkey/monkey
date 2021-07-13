@@ -113,20 +113,24 @@ Currently, only `Linux` on `x86_64` is supported. If you need arm support, file 
 - [x] auto-generate the mapping of syscall codes to names
 - [x] auto-generate the mapping of syscall codes to argument numbers and types
 - [x] basic `strace`-like behaviour - start a process, print syscalls and a summary at the end
-  - [ ] print nicely `umode_t` modes
   - [ ] detach on Ctrl-C
 - [x] command line flags handling - drop-in subset for `strace`
 - [x] ability to attach to a running process
+- [x] add hooks, so that you can implement your own logic and build your own strace
+- [x] handle yaml config files
+  - [ ] matching and manipulating arguments
+- [x] make sure it works in a container as a side car with `SYS_PTRACE`
 - [ ] handle tracee's signals
 - [ ] ability to find processes by PID, name, or ALL (attach to all processes inside of a container)
-- [x] add hooks, so that you can implement your own logic and build your own strace
-- [ ] handle yaml config files
-- [ ] make sure it works in a container as a side car
-- [ ] add an option of HTTP server with an interface to update the stats ()
-- [ ] prometheus metrics
+- [ ] HTTP server
+  - [ ] update the config on the fly
+  - [ ] prometheus metrics
+- [ ] write unit test coverage LOL
+- [ ] publish an image to Docker Hub
 - [ ] documentation on how to use
   - [ ] installation
-  - [ ] basic strace usage
+  - [ ] basic strace-like usage
+  - [ ] plenty of cool examples
   - [ ] attaching strace usage
   - [ ] sidecar container for Kubernetes
   - [ ] using the REST api to change the behaviour
