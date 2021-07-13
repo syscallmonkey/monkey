@@ -17,6 +17,8 @@ RUN make bin/monkey
 
 # Build the asset container, copy over the binary
 
-FROM scratch
-COPY --from=builder /w/bin/monkey /monkey
+FROM ubuntu:focal
+RUN apt-get update && apt-get install -y strace
+COPY --from=builder /w/bin/monkey /usr/bin/monkey
+COPY examples /examples
 ENTRYPOINT ["/monkey"]

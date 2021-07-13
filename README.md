@@ -42,7 +42,8 @@ See [more examples here](./examples).
   - [Tutorials](#tutorials)
   - [Installation](#installation)
     - [Binary](#binary)
-    - [Docker container](#docker-container)
+    - [Use Docker container](#use-docker-container)
+    - [Building Docker container](#building-docker-container)
     - [Compatibility](#compatibility)
   - [Advanced usage (SDK)](#advanced-usage-sdk)
   - [TODO](#todo)
@@ -66,7 +67,30 @@ make bin/monkey
 ./bin/monkey -h
 ```
 
-### Docker container
+### Use Docker container
+
+```sh
+docker pull ghcr.io/seeker89/syscall-monkey:v0.0.1rc0
+```
+
+```sh
+docker run -it ghcr.io/seeker89/syscall-monkey:v0.0.1rc0 -h
+Usage:
+  monkey [OPTIONS]
+
+Application Options:
+  -p, --attach=  Attach to the specified pid
+  -t, --target=  Attach to process matching this name
+  -c, --config=  Configuration file with desired scenario
+  -o, --output=  Write the tracing output to the file (instead of stdout)
+  -C, --summary  Show verbose debug information
+  -s, --silent   Don't display tracing info
+
+Help Options:
+  -h, --help     Show this help message
+```
+
+### Building Docker container
 
 ```sh
 git clone https://github.com/seeker89/syscall-monkey.git
