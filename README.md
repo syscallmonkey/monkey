@@ -42,8 +42,54 @@ TODO
 
 ## Installation
 
-TODO
+### Binary
 
+You can build the binary from the source:
+
+```sh
+git clone https://github.com/seeker89/syscall-monkey.git
+cd syscall-monkey
+make bin/monkey
+./bin/monkey -h
+```
+
+### Docker container
+
+```sh
+git clone https://github.com/seeker89/syscall-monkey.git
+cd syscall-monkey
+make build
+make run
+
+root@3e14fcd5843c:/# monkey -h
+Usage:
+  monkey [OPTIONS]
+
+Application Options:
+  -p, --attach=  Attach to the specified pid
+  -t, --target=  Attach to process matching this name
+  -c, --config=  Configuration file with desired scenario
+  -o, --output=  Write the tracing output to the file (instead of stdout)
+  -C, --summary  Show verbose debug information
+  -s, --silent   Don't display tracing info
+
+Help Options:
+  -h, --help     Show this help message
+
+panic: Usage:
+  monkey [OPTIONS]
+
+Application Options:
+  -p, --attach=  Attach to the specified pid
+  -t, --target=  Attach to process matching this name
+  -c, --config=  Configuration file with desired scenario
+  -o, --output=  Write the tracing output to the file (instead of stdout)
+  -C, --summary  Show verbose debug information
+  -s, --silent   Don't display tracing info
+
+Help Options:
+  -h, --help     Show this help message
+```
 
 ### Compatibility
 
