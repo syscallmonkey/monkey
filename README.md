@@ -114,7 +114,7 @@ type ExampleManipulator struct {
 
 func (sm *ExampleManipulator) HandleEntry(state SyscallState) SyscallState {
 	// change syscall to always be getpid
-	state.SyscallCode = 107
+	state.SyscallCode = 102
 	// and also count the entries
 	sm.Count++
 	return state
