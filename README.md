@@ -12,6 +12,36 @@ Chaos Engineering tool for introducing failure into syscalls
 - prepare scenarios in a simple `yaml` format
 - write custom scenarios using `syscall-monkey` as an SDK
 
+## Quick example
+
+Here's how you can trick `whoami` into changing the user from `root` (0) to `daemon` (1)
+
+```yaml
+rules:
+  - name: switch geteuid to return daemon
+    match:
+      name: geteuid
+    modify:
+      return: 1
+```
+
+```sh
+root@f34cc94a6b6d:/# whoami
+root
+root@f34cc94a6b6d:/# monkey -s -c /examples/getuid-user1.yml whoami
+daemon
+```
+
+## Tutorials
+
+TODO
+
+
+## Installation
+
+TODO
+
+
 ## TODO
 
 - [x] auto-generate the mapping of syscall codes to names
