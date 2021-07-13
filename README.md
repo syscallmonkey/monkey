@@ -53,16 +53,7 @@ TODO
 
 
 ## Installation
-- [Syscall monkey](#syscall-monkey)
-  - [TL;DR](#tldr)
-  - [Quick example](#quick-example)
-- [Table of contents](#table-of-contents)
-  - [Tutorials](#tutorials)
-  - [Installation](#installation)
-    - [Binary](#binary)
-    - [Docker container](#docker-container)
-    - [Compatibility](#compatibility)
-  - [TODO](#todo)
+
 ### Binary
 
 You can build the binary from the source:
