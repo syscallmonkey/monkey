@@ -4,7 +4,7 @@ bin ?= monkey
 pkg ?= "github.com/seeker89/syscall-monkey"
 tag = $(name):$(version)
 goos ?= linux
-namespace ?= "seeker89/"
+namespace ?= "ghcr.io/seeker89/"
 files = $(shell find . -iname "*.go")
 
 

@@ -2,6 +2,7 @@ package config
 
 import (
 	"io"
+	"os"
 
 	"github.com/jessevdk/go-flags"
 )
@@ -24,7 +25,7 @@ func ParseCommandLineFlags(args []string) *SyscallMonkeyConfig {
 	trailing, err := flags.ParseArgs(&config, args)
 	config.TrailingArgs = trailing
 	if err != nil {
-		panic(err)
+		os.Exit(1)
 	}
 	return &config
 }
