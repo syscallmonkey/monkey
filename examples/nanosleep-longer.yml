@@ -1,0 +1,6 @@
+rules:
+  - name: make sleep sleep longer
+    match:
+      name: nanosleep
+    delay:
+      before: 3s

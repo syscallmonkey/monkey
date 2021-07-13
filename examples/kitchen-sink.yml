@@ -1,8 +1,8 @@
 rules:
-  - name: block the nanosleep most of the time
+  - name: block the geteuid most of the time
     probability: 0.77
     match:
-      name: nanosleep
+      name: geteuid
       code: 123
       args:
         - number: 0
@@ -16,7 +16,7 @@ rules:
       after: 10ms
     modify:
       block: true
-      return: 0
+      return: -1
       args:
         - number: 1
           uint: 12328

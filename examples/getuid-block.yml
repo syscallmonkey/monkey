@@ -1,0 +1,7 @@
+rules:
+  - name: fail geteuid
+    match:
+      name: geteuid
+    modify:
+      block: true
+      return: -1
