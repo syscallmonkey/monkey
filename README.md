@@ -1,5 +1,6 @@
-# syscall-monkey
-Chaos Engineering tool for introducing failure into syscalls
+# Syscall monkey
+
+Chaos Engineering tool for tampering with syscalls.
 
 
 ## TL;DR
@@ -40,6 +41,11 @@ TODO
 ## Installation
 
 TODO
+
+
+### Compatibility
+
+Currently, only `Linux` on `x86_64` is supported. If you need arm support, file an issue.
 
 
 ## TODO
