@@ -73,22 +73,8 @@ make bin/monkey
 docker pull ghcr.io/seeker89/syscall-monkey:v0.0.1rc0
 ```
 
-```sh
-docker run -it ghcr.io/seeker89/syscall-monkey:v0.0.1rc0 -h
-Usage:
-  monkey [OPTIONS]
+Check [the latest available versions here](https://github.com/seeker89/syscall-monkey/pkgs/container/syscall-monkey).
 
-Application Options:
-  -p, --attach=  Attach to the specified pid
-  -t, --target=  Attach to process matching this name
-  -c, --config=  Configuration file with desired scenario
-  -o, --output=  Write the tracing output to the file (instead of stdout)
-  -C, --summary  Show verbose debug information
-  -s, --silent   Don't display tracing info
-
-Help Options:
-  -h, --help     Show this help message
-```
 
 ### Building Docker container
 
