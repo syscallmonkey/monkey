@@ -1,7 +1,7 @@
 name ?= syscall-monkey
 version ?= v0.0.1
 bin ?= monkey
-pkg ?= "github.com/seeker89/syscall-monkey"
+pkg ?= github.com/seeker89/syscall-monkey
 tag = $(name):$(version)
 goos ?= linux
 namespace ?= "ghcr.io/seeker89/"
