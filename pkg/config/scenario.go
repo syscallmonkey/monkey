@@ -6,6 +6,8 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// helpful: https://zhwt.github.io/yaml-to-go/
+
 type Scenario struct {
 	Rules []*SyscallRule
 }
