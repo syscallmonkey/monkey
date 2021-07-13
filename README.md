@@ -44,6 +44,7 @@ See [more examples here](./examples).
     - [Binary](#binary)
     - [Docker container](#docker-container)
     - [Compatibility](#compatibility)
+  - [Advanced usage (SDK)](#advanced-usage-sdk)
   - [TODO](#todo)
 
 
@@ -107,6 +108,49 @@ Help Options:
 
 Currently, only `Linux` on `x86_64` is supported. If you need arm support, file an issue.
 
+
+## Advanced usage (SDK)
+
+```go
+package main
+
+import (
+	"os"
+
+	"github.com/seeker89/syscall-monkey/pkg/config"
+	"github.com/seeker89/syscall-monkey/pkg/run"
+)
+
+// ExampleManipulator
+type ExampleManipulator struct {
+	Count int
+}
+
+func (sm *ExampleManipulator) HandleEntry(state SyscallState) SyscallState {
+	// change syscall to always be getpid
+    state.SyscallCode = 107
+    // and also count the entries
+	sm.Count++
+	return state
+}
+
+func (sm *ExampleManipulator) HandleExit(returnValue uint64) uint64 {
+    // change the syscall return value on every other call
+	if sm.Count%2 == 0 {
+		return 0
+	}
+	return returnValue
+}
+
+func main() {
+	// parse the config (or hardcode them, if you'd like)
+	config := config.ParseCommandLineFlags(os.Args[1:])
+    // implement your manipulator
+    m := ExampleManipulator{}
+	// run the tracer
+	run.RunTracer(config, &m)
+}
+```
 
 ## TODO
 
