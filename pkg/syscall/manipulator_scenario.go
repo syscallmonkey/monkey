@@ -59,9 +59,31 @@ func (sm *ScenarioManipulator) MatchRule(state *SyscallState, rule *config.Sysca
 		match = true
 	}
 
-	// TODO handle argument matching
+	argsMatch := true
+	if match == true && len(rule.Match.Args) > 0 {
+		for _, criteria := range rule.Match.Args {
+			argTypes := GetSyscallArgumentTypes(state.SyscallCode)
+			// ignore faulty ones
+			if criteria.Number < 0 || criteria.Number >= len(argTypes) {
+				continue
+			}
+			repr := FormatSyscallArgumentString(state.Pid, argTypes[criteria.Number], state.Args[criteria.Number])
+			if criteria.Int != nil && fmt.Sprintf("%d", *criteria.Int) != repr {
+				argsMatch = false
+				break
+			}
+			if criteria.Uint != nil && fmt.Sprintf("%d", *criteria.Uint) != repr {
+				argsMatch = false
+				break
+			}
+			if criteria.String != nil && *criteria.String != repr {
+				argsMatch = false
+				break
+			}
+		}
+	}
 
-	return match
+	return match && argsMatch
 }
 
 func (sm *ScenarioManipulator) HandleExit(returnValue uint64) uint64 {

@@ -33,10 +33,10 @@ type SyscallRuleModify struct {
 	Args   []*SyscallRuleArgs `yaml:"args"`
 }
 type SyscallRuleArgs struct {
-	Number int    `yaml:"number"`
-	Int    int    `yaml:"int,omitempty"`
-	Uint   uint   `yaml:"uint,omitempty"`
-	String string `yaml:"string,omitempty"`
+	Number int     `yaml:"number"`
+	Int    *int    `yaml:"int,omitempty"`
+	Uint   *uint   `yaml:"uint,omitempty"`
+	String *string `yaml:"string,omitempty"`
 }
 
 func ParseScenario(data []byte) (*Scenario, error) {
