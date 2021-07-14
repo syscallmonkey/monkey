@@ -26,12 +26,6 @@ for elem in data.values():
     print(f"  {code} : \"{name}\",")
 print("}")
 
-print("var nameToCode = map[string]uint64{")
-for elem in data.values():
-    code, name, entry_point, impl, arguments = elem
-    print(f"  \"{name}\" : {code},")
-print("}")
-
 print("var codeToArgTypes = map[uint64][]string{")
 for elem in data.values():
     code, name, entry_point, impl, arguments = elem
@@ -55,16 +49,3 @@ for elem in data.values():
     ])
     print(f"  {code} : {{{argument_types}}},")
 print("}")
-
-print('''
-func GetSyscallName(code uint64) string {
-  return codeToName[code]
-}
-
-func GetSyscallArgumentTypes(code uint64) []string {
-  return codeToArgTypes[code]
-}
-
-func GetSyscallArgumentNames(code uint64) []string {
-  return codeToArgNames[code]
-}''')
