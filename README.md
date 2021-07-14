@@ -158,7 +158,7 @@ func main() {
 - [x] ability to attach to a running process
 - [x] add hooks, so that you can implement your own logic and build your own strace
 - [x] handle yaml config files
-  - [ ] matching and manipulating arguments
+  - [x] matching and manipulating arguments
 - [x] make sure it works in a container as a side car with `SYS_PTRACE`
 - [ ] handle tracee's signals
 - [ ] ability to find processes by PID, name, or ALL (attach to all processes inside of a container)
