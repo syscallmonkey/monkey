@@ -187,6 +187,7 @@ func main() {
 - [x] make sure it works in a container as a side car with `SYS_PTRACE`
 - [x] handle tracee's signals
 - [ ] ability to find processes by PID, name, or ALL (attach to all processes inside of a container)
+- [ ] ability to detect and follow children
 - [ ] HTTP server
   - [ ] update the config on the fly
   - [ ] prometheus metrics
