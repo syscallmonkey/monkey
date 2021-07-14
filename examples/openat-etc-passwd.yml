@@ -1,0 +1,15 @@
+rules:
+  - name: make
+    probability: 0.77
+    match:
+      name: openat
+      args:
+        - number: 1
+          string: "/etc/passwd"
+    modify:
+      args:
+        - number: 1
+          string: "/tmp/passwd"
+
+# for the whoami trick to work, create /tmp/passwd with this:
+# something-completely-made-up:x:0:0:root:/root:/bin/bash
