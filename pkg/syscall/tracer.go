@@ -27,21 +27,47 @@ func (t *Tracer) Loop() {
 	var regs syscall.PtraceRegs
 	var err error
 	var entry bool = true
-	// set the tracing options
-	// TODO https://man7.org/linux/man-pages/man2/ptrace.2.html
+	// Set options to detect our syscalls
+	// https://man7.org/linux/man-pages/man2/ptrace.2.html
+	// PTRACE_O_TRACESYSGOOD (since Linux 2.4.6)
+	// When delivering system call traps, set bit 7 in the
+	// signal number (i.e., deliver SIGTRAP|0x80).  This
+	// makes it easy for the tracer to distinguish normal
+	// traps from those caused by a system call.
+	err = syscall.PtraceSetOptions(pid, syscall.PTRACE_O_TRACESYSGOOD)
+	if err != nil {
+		fmt.Printf("Error setting options %v\n", err)
+		panic(err)
+	}
+	// TODO FIXME the call parameters are empty
 	// handle the first syscall on its way out - the execve
-	syscall.PtraceGetRegs(t.Pid, &regs)
+	err = syscall.PtraceGetRegs(t.Pid, &regs)
+	if err != nil {
+		panic(err)
+	}
 	t.HandleSyscallEntry(regs)
 	t.HandleSyscallExit(regs)
 	// handle syscalls forever
 	for {
-		err = syscall.PtraceSyscall(t.Pid, 0)
-		if err != nil {
-			panic(err)
-		}
-		_, err = syscall.Wait4(t.Pid, nil, 0, nil)
-		if err != nil {
-			panic(err)
+		for {
+			err = syscall.PtraceSyscall(t.Pid, 0)
+			if err != nil {
+				fmt.Printf("error: %v, pid: %d\n", err, t.Pid)
+				panic(err)
+			}
+			var wstatus syscall.WaitStatus
+			_, err := syscall.Wait4(t.Pid, &wstatus, 0, nil)
+			if err != nil {
+				panic(err)
+			}
+			// stopped and stopped for us (syscall.PTRACE_O_TRACESYSGOOD)
+			if wstatus.Stopped() && wstatus.StopSignal()&0x80 == 0x80 {
+				break
+			}
+			// or terminated
+			if wstatus.Exited() {
+				return
+			}
 		}
 		err = syscall.PtraceGetRegs(t.Pid, &regs)
 		if err != nil {

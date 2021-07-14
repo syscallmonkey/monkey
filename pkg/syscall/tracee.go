@@ -18,15 +18,49 @@ func StartTracee(args []string) (int, error) {
 	}
 	// start and expect error "stop signal: trace/breakpoint trap"
 	cmd.Start()
-	err := cmd.Wait()
+	pid := cmd.Process.Pid
+	var wstatus syscall.WaitStatus
+	_, err := syscall.Wait4(pid, &wstatus, 0, nil)
 	if err != nil {
-		fmt.Printf("Wait returned: %v\n", err)
+		fmt.Printf("Error waiting: %v\n", err)
+		panic(err)
 	}
-
-	return cmd.Process.Pid, nil
+	if wstatus.StopSignal() != syscall.SIGTRAP || !wstatus.Stopped() {
+		fmt.Printf("Expecting trapped and stopped process\n")
+		panic(fmt.Errorf("Expecting trapped and stopped process"))
+	}
+	fmt.Printf("Started new process pid %d\n", pid)
+	return pid, nil
 }
 
 // AttachToProcess attaches to an arbitrary process
 func AttachToProcess(pid int) error {
-	return syscall.PtraceAttach(pid)
+	// https://man7.org/linux/man-pages/man2/ptrace.2.html
+	// The tracee is sent a SIGSTOP, but
+	// will not necessarily have stopped by the completion of
+	// this call; use waitpid(2) to wait for the tracee to stop.
+	fmt.Printf("Attaching to %d\n", pid)
+	err := syscall.PtraceAttach(pid)
+	if err != nil {
+		fmt.Printf("Error attaching %v\n", err)
+		return err
+	}
+	// wait for it to be stopped
+	var wstatus syscall.WaitStatus
+	for {
+		_, err := syscall.Wait4(pid, &wstatus, 0, nil)
+		if err != nil {
+			panic(err)
+		}
+		if wstatus.Stopped() {
+			break
+		}
+	}
+	fmt.Printf("Attached to %d\n", pid)
+	return nil
+}
+
+// DetachProcess detaches from previously attached process
+func DetachProcess(pid int) error {
+	return syscall.PtraceDetach(pid)
 }
