@@ -11,5 +11,5 @@ rules:
         - number: 1
           string: "/tmp/passwd"
 
-# for the whoami trick to work, create /tmp/passwd with this:
-# something-completely-made-up:x:0:0:root:/root:/bin/bash
+# for the whoami trick to work, create /tmp/passwd:
+# echo "something-completely-made-up:x:0:0:root:/root:/bin/bash" > /tmp/passwd

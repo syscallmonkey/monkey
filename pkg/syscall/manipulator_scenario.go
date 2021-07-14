@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"strings"
+	"syscall"
 	"time"
 
 	config "github.com/seeker89/syscall-monkey/pkg/config"
@@ -44,6 +45,27 @@ func (sm *ScenarioManipulator) HandleEntry(state SyscallState) SyscallState {
 			// replace the syscall code with geteuid
 			// TODO figure out a better way of doing that
 			state.SyscallCode = 107
+		}
+
+		if rule.Modify != nil && len(rule.Modify.Args) > 0 {
+			for _, modifs := range rule.Modify.Args {
+				argTypes := GetSyscallArgumentTypes(state.SyscallCode)
+				if modifs.Number < 0 || modifs.Number >= len(argTypes) {
+					continue
+				}
+				if modifs.Int != nil {
+					state.Args[modifs.Number] = uint64(*modifs.Int)
+				}
+				if modifs.Uint != nil {
+					state.Args[modifs.Number] = uint64(*modifs.Uint)
+				}
+				if modifs.String != nil {
+					_, err := syscall.PtracePokeData(state.Pid, uintptr(state.Args[modifs.Number]), []byte(*modifs.String))
+					if err != nil {
+						panic(err)
+					}
+				}
+			}
 		}
 	}
 	return state

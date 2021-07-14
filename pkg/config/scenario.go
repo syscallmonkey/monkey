@@ -34,8 +34,8 @@ type SyscallRuleModify struct {
 }
 type SyscallRuleArgs struct {
 	Number int     `yaml:"number"`
-	Int    *int    `yaml:"int,omitempty"`
-	Uint   *uint   `yaml:"uint,omitempty"`
+	Int    *int64  `yaml:"int,omitempty"`
+	Uint   *uint64 `yaml:"uint,omitempty"`
 	String *string `yaml:"string,omitempty"`
 }
 
