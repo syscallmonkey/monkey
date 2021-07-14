@@ -153,14 +153,14 @@ func main() {
 - [x] auto-generate the mapping of syscall codes to names
 - [x] auto-generate the mapping of syscall codes to argument numbers and types
 - [x] basic `strace`-like behaviour - start a process, print syscalls and a summary at the end
-  - [ ] detach on Ctrl-C
+  - [ ] clean detach on Ctrl-C
 - [x] command line flags handling - drop-in subset for `strace`
 - [x] ability to attach to a running process
 - [x] add hooks, so that you can implement your own logic and build your own strace
 - [x] handle yaml config files
   - [x] matching and manipulating arguments
 - [x] make sure it works in a container as a side car with `SYS_PTRACE`
-- [ ] handle tracee's signals
+- [x] handle tracee's signals
 - [ ] ability to find processes by PID, name, or ALL (attach to all processes inside of a container)
 - [ ] HTTP server
   - [ ] update the config on the fly
