@@ -34,7 +34,7 @@ func (t *Tracer) Loop() {
 	// signal number (i.e., deliver SIGTRAP|0x80).  This
 	// makes it easy for the tracer to distinguish normal
 	// traps from those caused by a system call.
-	err = syscall.PtraceSetOptions(pid, syscall.PTRACE_O_TRACESYSGOOD)
+	err = syscall.PtraceSetOptions(t.Pid, syscall.PTRACE_O_TRACESYSGOOD)
 	if err != nil {
 		fmt.Printf("Error setting options %v\n", err)
 		panic(err)
@@ -60,12 +60,17 @@ func (t *Tracer) Loop() {
 			if err != nil {
 				panic(err)
 			}
+			// on execve
+			if wstatus.StopSignal() == syscall.SIGTRAP {
+				fmt.Printf("GOT a SIGTRAP (execve)\n")
+			}
 			// stopped and stopped for us (syscall.PTRACE_O_TRACESYSGOOD)
 			if wstatus.Stopped() && wstatus.StopSignal()&0x80 == 0x80 {
 				break
 			}
 			// or terminated
 			if wstatus.Exited() {
+				fmt.Fprintf(t.Out, "\n--- program exited ---\n")
 				return
 			}
 		}
