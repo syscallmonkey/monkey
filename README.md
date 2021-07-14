@@ -18,7 +18,7 @@ Here's how you can trick `whoami` into changing the user from `root` (0) to `dae
 
 ```yaml
 rules:
-  - name: switch geteuid to return daemon
+  - name: switch geteuid to return a different user ID
     match:
       name: geteuid
     modify:
@@ -30,6 +30,31 @@ root@f34cc94a6b6d:/# whoami
 root
 root@f34cc94a6b6d:/# monkey -s -c /examples/getuid-user1.yml whoami
 daemon
+```
+
+And here's another - replace the file that `openat` uses in `whoami`:
+
+```yaml
+rules:
+  - name: make
+    probability: 0.77
+    match:
+      name: openat
+      args:
+        - number: 1
+          string: "/etc/passwd"
+    modify:
+      args:
+        - number: 1
+          string: "/tmp/passwd"
+```
+
+```sh
+root@f34cc94a6b6d:/# whoami
+root
+root@bc2f54570070:/# echo "LOL-HACKED:x:0:0:root:/root:/bin/bash" > /tmp/passwd
+root@bc2f54570070:/# monkey -s -c /examples/openat-etc-passwd.yml whoami
+LOL-HACKED
 ```
 
 See [more examples here](./examples).
