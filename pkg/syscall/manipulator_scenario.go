@@ -7,7 +7,7 @@ import (
 	"syscall"
 	"time"
 
-	config "github.com/seeker89/syscall-monkey/pkg/config"
+	config "github.com/syscallmonkey/monkey/pkg/config"
 )
 
 type ScenarioManipulator struct {

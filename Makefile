@@ -1,10 +1,10 @@
-name ?= syscall-monkey
+name ?= monkey
 version ?= v0.0.1
 bin ?= monkey
-pkg ?= github.com/seeker89/syscall-monkey
+pkg ?= github.com/syscallmonkey/monkey
 tag = $(name):$(version)
 goos ?= linux
-namespace ?= ghcr.io/seeker89/
+namespace ?= ghcr.io/syscallmonkey/
 files = $(shell find . -iname "*.go")
 
 

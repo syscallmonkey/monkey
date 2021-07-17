@@ -86,7 +86,7 @@ TODO
 You can build the binary from the source:
 
 ```sh
-git clone https://github.com/seeker89/syscall-monkey.git
+git clone https://github.com/syscallmonkey/monkey.git
 cd syscall-monkey
 make bin/monkey
 ./bin/monkey -h
@@ -98,13 +98,13 @@ make bin/monkey
 docker pull ghcr.io/seeker89/syscall-monkey:v0.0.1rc0
 ```
 
-Check [the latest available versions here](https://github.com/seeker89/syscall-monkey/pkgs/container/syscall-monkey).
+Check [the latest available versions here](https://github.com/syscallmonkey/monkey/pkgs/container/syscall-monkey).
 
 
 ### Building Docker container
 
 ```sh
-git clone https://github.com/seeker89/syscall-monkey.git
+git clone https://github.com/syscallmonkey/monkey.git
 cd syscall-monkey
 make build
 make run
@@ -138,8 +138,8 @@ package main
 import (
 	"os"
 
-	"github.com/seeker89/syscall-monkey/pkg/config"
-	"github.com/seeker89/syscall-monkey/pkg/run"
+	"github.com/syscallmonkey/monkey/pkg/config"
+	"github.com/syscallmonkey/monkey/pkg/run"
 )
 
 // ExampleManipulator does some random stuff, to illustrate what you can do

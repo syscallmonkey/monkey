@@ -5,8 +5,8 @@ import (
 	"io"
 	"os"
 
-	smc "github.com/seeker89/syscall-monkey/pkg/config"
-	sc "github.com/seeker89/syscall-monkey/pkg/syscall"
+	smc "github.com/syscallmonkey/monkey/pkg/config"
+	sc "github.com/syscallmonkey/monkey/pkg/syscall"
 )
 
 // RunTracer starts a tracer using the provided config and manipulator object

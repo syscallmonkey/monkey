@@ -5,8 +5,8 @@ package main
 import (
 	"os"
 
-	smc "github.com/seeker89/syscall-monkey/pkg/config"
-	smr "github.com/seeker89/syscall-monkey/pkg/run"
+	smc "github.com/syscallmonkey/monkey/pkg/config"
+	smr "github.com/syscallmonkey/monkey/pkg/run"
 )
 
 var (

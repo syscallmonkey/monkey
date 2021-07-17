@@ -1,4 +1,4 @@
-module github.com/seeker89/syscall-monkey
+module github.com/syscallmonkey/monkey
 
 go 1.16
 
