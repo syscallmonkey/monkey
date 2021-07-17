@@ -87,7 +87,7 @@ You can build the binary from the source:
 
 ```sh
 git clone https://github.com/syscallmonkey/monkey.git
-cd syscall-monkey
+cd monkey
 make bin/monkey
 ./bin/monkey -h
 ```
@@ -95,10 +95,10 @@ make bin/monkey
 ### Use Docker container
 
 ```sh
-docker pull ghcr.io/seeker89/syscall-monkey:v0.0.1rc0
+docker pull ghcr.io/syscallmonkey/monkey:0.0.1rc1
 ```
 
-Check [the latest available versions here](https://github.com/syscallmonkey/monkey/pkgs/container/syscall-monkey).
+Check [the latest available versions here](https://github.com/syscallmonkey/monkey/pkgs/container/monkey).
 
 
 ### Building Docker container
