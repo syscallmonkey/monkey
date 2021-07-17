@@ -105,7 +105,7 @@ Check [the latest available versions here](https://github.com/syscallmonkey/monk
 
 ```sh
 git clone https://github.com/syscallmonkey/monkey.git
-cd syscall-monkey
+cd monkey
 make build
 make run
 

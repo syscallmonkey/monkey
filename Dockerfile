@@ -21,4 +21,4 @@ FROM ubuntu:focal
 RUN apt-get update && apt-get install -y strace
 COPY --from=builder /w/bin/monkey /usr/bin/monkey
 COPY examples /examples
-ENTRYPOINT ["/monkey"]
+ENTRYPOINT ["/usr/bin/monkey"]
