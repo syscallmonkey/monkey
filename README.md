@@ -26,9 +26,9 @@ To get started, check out the docs: https://syscallmonkey.github.io/
 - [ ] write unit test coverage LOL
 - [ ] publish an image to Docker Hub
 - [ ] documentation on how to use
-  - [ ] installation
-  - [ ] basic strace-like usage
+  - [x] installation
+  - [x] basic strace-like usage
+  - [x] attaching strace usage
   - [ ] plenty of cool examples
-  - [ ] attaching strace usage
   - [ ] sidecar container for Kubernetes
   - [ ] using the REST api to change the behaviour
