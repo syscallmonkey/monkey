@@ -7,18 +7,18 @@ import (
 )
 
 type Tracer struct {
-	Pid         int
-	Counter     *SyscallCounter
-	Out         io.Writer
-	Manipulator SyscallManipulator
+	Pid          int
+	Counter      *SyscallCounter
+	Out          io.Writer
+	Manipulators []SyscallManipulator
 }
 
-func NewTracer(pid int, out io.Writer, manipulator SyscallManipulator) *Tracer {
+func NewTracer(pid int, out io.Writer, manipulators []SyscallManipulator) *Tracer {
 	t := Tracer{
-		Pid:         pid,
-		Out:         out,
-		Manipulator: manipulator,
-		Counter:     NewSyscallCounter(),
+		Pid:          pid,
+		Out:          out,
+		Manipulators: manipulators,
+		Counter:      NewSyscallCounter(),
 	}
 	return &t
 }
@@ -90,38 +90,43 @@ func (t *Tracer) Loop() {
 
 func (t *Tracer) HandleSyscallEntry(regs syscall.PtraceRegs) {
 	fmt.Fprintf(t.Out, FormatSyscallEntry(t.Pid, regs))
-	if t.Manipulator != nil {
-		code := ReadSyscallArg(regs, -1)
-		state := SyscallState{
-			SyscallCode: code,
-			SyscallName: GetSyscallName(code),
-			Pid:         t.Pid,
-		}
-		for i := range state.Args {
-			state.Args[i] = ReadSyscallArg(regs, i)
-		}
-		newState := t.Manipulator.HandleEntry(state)
-		if newState != state {
-			newRegs := regs
-			WriteSyscallArg(&newRegs, -1, newState.SyscallCode)
-			for i := range newState.Args {
-				WriteSyscallArg(&newRegs, i, newState.Args[i])
+	for _, manipulator := range t.Manipulators {
+		if manipulator != nil {
+			code := ReadSyscallArg(regs, -1)
+			state := SyscallState{
+				SyscallCode: code,
+				SyscallName: GetSyscallName(code),
+				Pid:         t.Pid,
 			}
-			syscall.PtraceSetRegs(t.Pid, &newRegs)
+			for i := range state.Args {
+				state.Args[i] = ReadSyscallArg(regs, i)
+			}
+			newState := manipulator.HandleEntry(state)
+			if newState != state {
+				newRegs := regs
+				WriteSyscallArg(&newRegs, -1, newState.SyscallCode)
+				for i := range newState.Args {
+					WriteSyscallArg(&newRegs, i, newState.Args[i])
+				}
+				syscall.PtraceSetRegs(t.Pid, &newRegs)
+			}
 		}
 	}
+
 }
 
 func (t *Tracer) HandleSyscallExit(regs syscall.PtraceRegs) {
 	t.Counter.Inc(regs.Orig_rax)
 	fmt.Fprintf(t.Out, FormatSyscallExit(regs))
-	if t.Manipulator != nil {
-		ret := ReadSyscallArg(regs, -2)
-		newRet := t.Manipulator.HandleExit(ret)
-		if newRet != ret {
-			newRegs := regs
-			WriteSyscallArg(&newRegs, -2, newRet)
-			syscall.PtraceSetRegs(t.Pid, &newRegs)
+	for _, manipulator := range t.Manipulators {
+		if manipulator != nil {
+			ret := ReadSyscallArg(regs, -2)
+			newRet := manipulator.HandleExit(ret)
+			if newRet != ret {
+				newRegs := regs
+				WriteSyscallArg(&newRegs, -2, newRet)
+				syscall.PtraceSetRegs(t.Pid, &newRegs)
+			}
 		}
 	}
 }

@@ -11,7 +11,7 @@ import (
 )
 
 // RunTracer starts a tracer using the provided config and manipulator object
-func RunTracer(config *smc.SyscallMonkeyConfig, manipulator sc.SyscallManipulator) {
+func RunTracer(config *smc.SyscallMonkeyConfig, manipulators []sc.SyscallManipulator) {
 
 	// figure out where to direct the output
 	if config.Silent {
@@ -72,12 +72,12 @@ func RunTracer(config *smc.SyscallMonkeyConfig, manipulator sc.SyscallManipulato
 		if err != nil {
 			panic(err)
 		}
-		manipulator = &sc.ScenarioManipulator{
+		manipulators = append(manipulators, &sc.ScenarioManipulator{
 			Scenario: scenario,
-		}
+		})
 	}
 
-	tracer := sc.NewTracer(config.AttachPid, config.OutputFile, manipulator)
+	tracer := sc.NewTracer(config.AttachPid, config.OutputFile, manipulators)
 
 	// trace the program until it finishes
 	tracer.Loop()
