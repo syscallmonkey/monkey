@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 
+	ps "github.com/mitchellh/go-ps"
 	smc "github.com/syscallmonkey/monkey/pkg/config"
 	sc "github.com/syscallmonkey/monkey/pkg/syscall"
 )
@@ -29,21 +30,40 @@ func RunTracer(config *smc.SyscallMonkeyConfig, manipulator sc.SyscallManipulato
 	// just a reminder
 	fmt.Fprintf(config.OutputFile, "Version %s, build %s\n", config.Version, config.Build)
 
-	if config.AttachPid == 0 {
-		if len(config.TrailingArgs) == 0 {
-			fmt.Fprintf(config.OutputFile, "Error: need either -p or a command to run\n")
-			os.Exit(1)
+	if config.AttachPid == 0 && config.TargetName == "" && len(config.TrailingArgs) == 0 {
+		fmt.Fprintf(config.OutputFile, "Error: need -p, -t or a command to run\n")
+		os.Exit(1)
+	}
+
+	if config.AttachPid != 0 {
+		err := sc.AttachToProcess(config.AttachPid)
+		if err != nil {
+			panic(err)
 		}
+	} else if config.TargetName != "" {
+		procs, err := ps.Processes()
+		if err != nil {
+			panic(err)
+		}
+		for _, proc := range procs {
+			if proc.Executable() == config.TargetName {
+				config.AttachPid = proc.Pid()
+				break
+			}
+		}
+		if config.AttachPid == 0 {
+			panic(fmt.Errorf("No process found for name: %s (%d procs total)", config.TargetName, len(procs)))
+		}
+		err = sc.AttachToProcess(config.AttachPid)
+		if err != nil {
+			panic(err)
+		}
+	} else {
 		pid, err := sc.StartTracee(config.TrailingArgs)
 		if err != nil {
 			panic(err)
 		}
 		config.AttachPid = pid
-	} else {
-		err := sc.AttachToProcess(config.AttachPid)
-		if err != nil {
-			panic(err)
-		}
 	}
 
 	// read the config, if specified
