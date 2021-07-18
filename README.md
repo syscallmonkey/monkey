@@ -20,6 +20,7 @@ To get started, check out the docs: https://syscallmonkey.github.io/
 - [x] handle tracee's signals
 - [x] ability to find processes by PID or name
 - [x] automate publishing docker image
+- [ ] figure out why the arguments for the first syscall don't work
 - [ ] multi-process support
   - [ ] ability to detect and follow children
   - [ ] ability to find multiple processes
