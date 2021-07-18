@@ -19,6 +19,7 @@ To get started, check out the docs: https://syscallmonkey.github.io/
 - [x] make sure it works in a container as a side car with `SYS_PTRACE`
 - [x] handle tracee's signals
 - [x] ability to find processes by PID or name
+- [x] automate publishing docker image
 - [ ] multi-process support
   - [ ] ability to detect and follow children
   - [ ] ability to find multiple processes
@@ -26,7 +27,6 @@ To get started, check out the docs: https://syscallmonkey.github.io/
   - [ ] update the config on the fly
   - [ ] prometheus metrics
 - [ ] write unit test coverage LOL
-- [ ] publish an image to Docker Hub
 - [ ] documentation on how to use
   - [x] installation
   - [x] basic strace-like usage
