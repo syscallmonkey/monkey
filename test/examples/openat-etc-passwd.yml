@@ -1,5 +1,5 @@
 rules:
-  - name: make
+  - name: make whoami read the wrong /etc/passwd file
     probability: 0.77
     match:
       name: openat
