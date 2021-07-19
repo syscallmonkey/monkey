@@ -17,8 +17,8 @@ func RunTracer(config *smc.SyscallMonkeyConfig, manipulators []sc.SyscallManipul
 	if config.TraceeStdin == nil {
 		config.TraceeStdin = os.Stdin
 	}
-	if config.TraceeStdin == nil {
-		config.TraceeStdin = os.Stdin
+	if config.TraceeStdout == nil {
+		config.TraceeStdout = os.Stdout
 	}
 	if config.TraceeStderr == nil {
 		config.TraceeStderr = os.Stderr
