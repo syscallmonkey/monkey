@@ -67,7 +67,7 @@ func FormatSyscallArgumentString(pid int, argType string, argVal uint64) string 
 				break
 			}
 		}
-		return "\"" + string(printable) + "\""
+		return string(printable)
 	case "const struct sigaction __user *", "struct sigaction __user *":
 		return fmt.Sprintf("0x%x", argVal)
 	default:
