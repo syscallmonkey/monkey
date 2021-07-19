@@ -60,9 +60,14 @@ func (sm *ScenarioManipulator) HandleEntry(state SyscallState) SyscallState {
 					state.Args[modifs.Number] = uint64(*modifs.Uint)
 				}
 				if modifs.String != nil {
-					_, err := syscall.PtracePokeData(state.Pid, uintptr(state.Args[modifs.Number]), []byte(*modifs.String))
+					// need to finish the string off C-style
+					payload := append([]byte(*modifs.String), 0)
+					count, err := syscall.PtracePokeData(state.Pid, uintptr(state.Args[modifs.Number]), payload)
 					if err != nil {
 						panic(err)
+					}
+					if count != len(payload) {
+						panic(fmt.Errorf("Couldn't write enough data. Wrote %d, wanted %d", count, len(payload)))
 					}
 				}
 			}
