@@ -13,7 +13,18 @@ import (
 // RunTracer starts a tracer using the provided config and manipulator object
 func RunTracer(config *smc.SyscallMonkeyConfig, manipulators []sc.SyscallManipulator) {
 
-	// figure out where to direct the output
+	// figure out the tracee output
+	if config.TraceeStdin == nil {
+		config.TraceeStdin = os.Stdin
+	}
+	if config.TraceeStdin == nil {
+		config.TraceeStdin = os.Stdin
+	}
+	if config.TraceeStderr == nil {
+		config.TraceeStderr = os.Stderr
+	}
+
+	// figure out where to direct the tracing output
 	if config.Silent {
 		config.OutputFile = io.Discard
 	} else if config.OutputFile == nil && config.OutputPath != "" {
@@ -59,7 +70,12 @@ func RunTracer(config *smc.SyscallMonkeyConfig, manipulators []sc.SyscallManipul
 			panic(err)
 		}
 	} else {
-		pid, err := sc.StartTracee(config.TrailingArgs)
+		pid, err := sc.StartTracee(
+			config.TrailingArgs,
+			config.TraceeStdin,
+			config.TraceeStdout,
+			config.TraceeStderr,
+		)
 		if err != nil {
 			panic(err)
 		}

@@ -2,17 +2,17 @@ package syscall
 
 import (
 	"fmt"
-	"os"
+	"io"
 	"os/exec"
 	"syscall"
 )
 
 // StartTracee starts a new process in Ptrace mode, and awaits the first reutrn
-func StartTracee(args []string) (int, error) {
+func StartTracee(args []string, stdin io.Reader, stdout, stderr io.Writer) (int, error) {
 	cmd := exec.Command(args[0], args[1:]...)
-	cmd.Stderr = os.Stderr
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
+	cmd.Stdin = stdin
+	cmd.Stdout = stdout
+	cmd.Stderr = stderr
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		Ptrace: true,
 	}
