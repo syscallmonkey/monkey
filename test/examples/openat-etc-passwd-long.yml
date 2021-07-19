@@ -8,7 +8,7 @@ rules:
     modify:
       args:
         - number: 0
-          string: "/tmp/passwd"
+          string: "/tmp/pretty-long-passwd"
   - name: make whoami read the wrong /etc/passwd file
     match:
       name: openat
@@ -18,7 +18,7 @@ rules:
     modify:
       args:
         - number: 1
-          string: "/tmp/passwd"
+          string: "/tmp/pretty-long-passwd"
 
 # for the whoami trick to work, create /tmp/passwd:
 # echo "something-completely-made-up:x:0:0:root:/root:/bin/bash" > /tmp/passwd
