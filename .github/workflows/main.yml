@@ -19,6 +19,9 @@ jobs:
         run: |
           make bin/monkey
           ./bin/monkey -h || true
+      - name: Run tests
+        run: |
+          make test
       - name: Build the Docker image
         run: |
           make build
