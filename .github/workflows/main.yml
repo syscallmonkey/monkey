@@ -22,6 +22,7 @@ jobs:
       - name: Run tests
         run: |
           make test
+          make test-alpine
       - name: Build the Docker image
         run: |
           make build

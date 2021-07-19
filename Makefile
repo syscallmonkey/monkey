@@ -25,7 +25,11 @@ run:
 
 test:
 	docker build -t testing -f ./Dockerfile.test .
-	docker run --rm testing go test -v ./test
+	docker run --rm testing go test -v ./...
+
+test-alpine:
+	docker build -t testing -f ./Dockerfile.test-alpine .
+	docker run --rm testing go test -v ./...
 
 clean:
 	rm -rf bin
@@ -33,4 +37,4 @@ clean:
 generate:
 	python3 build/generate.py > pkg/syscall/syscalls_linux.go
 
-.PHONY: clean build tag push run generate test
+.PHONY: clean build tag push run generate test test-alpine

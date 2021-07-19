@@ -1,8 +1,8 @@
-FROM golang:1.16-buster as builder
+FROM golang:1.16-alpine as builder
 
 # Install build deps
 
-RUN apt-get install -y git make bash
+RUN apk add --update git make bash
 
 # Get dependencies
 
