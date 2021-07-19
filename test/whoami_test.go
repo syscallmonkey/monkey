@@ -1,7 +1,6 @@
 package test
 
 import (
-	_ "embed"
 	"fmt"
 	"io/ioutil"
 	"strings"
@@ -11,8 +10,7 @@ import (
 	smrun "github.com/syscallmonkey/monkey/pkg/run"
 )
 
-//go:embed examples/getuid-user1.yml
-var getUidUser1 string
+var EXAMPLE_GETUID_USER1_PATH string = "./examples/getuid-user1.yml"
 
 func GetUserNameById(id int) (string, error) {
 	// return user from etc/passwd
@@ -21,10 +19,11 @@ func GetUserNameById(id int) (string, error) {
 		return "", fmt.Errorf("error reading /etc/passwd: %v", err)
 	}
 	var name string
+	idString := fmt.Sprintf("%d", id)
 	lines := strings.Split(string(content), "\n")
 	for _, line := range lines {
 		items := strings.Split(line, ":")
-		if len(items) == 7 && items[2] == "1" {
+		if len(items) == 7 && items[2] == idString {
 			name = items[0]
 		}
 	}
@@ -33,24 +32,48 @@ func GetUserNameById(id int) (string, error) {
 
 func TestChangeGetUidReturnValue(t *testing.T) {
 
-	expectedUser, err := GetUserNameById(1)
+	// check the that running as regular user matches the output
+	regularUser, err := GetUserNameById(0)
 	if err != nil {
 		t.Errorf("Error getting user name %v", err)
 	}
-
-	// run the thing
 	output := strings.Builder{}
 	config := smc.SyscallMonkeyConfig{
-		ConfigPath:   "./examples/getuid-user1.yml",
 		TrailingArgs: []string{"whoami"},
 		Silent:       true,
 		TraceeStdout: &output,
 	}
 	smrun.RunTracer(&config, nil)
 
-	outputTrimmed := strings.TrimSpace(output.String())
+	regularOutput := strings.TrimSpace(output.String())
 
-	if outputTrimmed != expectedUser {
-		t.Errorf("Expected '%s', got '%s' (%s)", expectedUser, outputTrimmed, output.String())
+	if regularOutput != regularUser {
+		t.Errorf("Expected '%s', got '%s' (%s)", regularUser, regularOutput, output.String())
+	}
+
+	// get user 1
+	modifiedUser, err := GetUserNameById(1)
+	if err != nil {
+		t.Errorf("Error getting user name %v", err)
+	}
+
+	if regularUser == modifiedUser {
+		t.Errorf("Expected '%s' to be different from '%s'", regularUser, modifiedUser)
+	}
+
+	// check that running with the scenario it returns a different user
+	output.Reset()
+	config = smc.SyscallMonkeyConfig{
+		ConfigPath:   EXAMPLE_GETUID_USER1_PATH,
+		TrailingArgs: []string{"whoami"},
+		Silent:       true,
+		TraceeStdout: &output,
+	}
+	smrun.RunTracer(&config, nil)
+
+	modifiedOutput := strings.TrimSpace(output.String())
+
+	if modifiedOutput != modifiedUser {
+		t.Errorf("Expected '%s', got '%s' (%s)", modifiedUser, modifiedOutput, output.String())
 	}
 }
