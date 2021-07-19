@@ -21,6 +21,7 @@ To get started, check out the docs: https://syscallmonkey.github.io/
 - [x] ability to find processes by PID or name
 - [x] automate publishing docker image
 - [ ] figure out why the arguments for the first syscall don't work
+- [x] change how the strings and buffers are printed - handle `\n`, `\r`, `\t` and non-printable characters
 - [ ] multi-process support
   - [ ] ability to detect and follow children
   - [ ] ability to find multiple processes

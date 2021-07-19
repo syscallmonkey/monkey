@@ -6,15 +6,6 @@ import (
 	"syscall"
 )
 
-func clen(n []byte) int {
-	for i := 0; i < len(n); i++ {
-		if n[i] == 0 {
-			return i
-		}
-	}
-	return len(n)
-}
-
 func FormatSyscallExit(regs syscall.PtraceRegs) string {
 	ret := int64(regs.Rax)
 	if ret >= 0 {
@@ -54,7 +45,29 @@ func FormatSyscallArgumentString(pid int, argType string, argVal uint64) string 
 		if err != nil {
 			panic(err)
 		}
-		return string(out[:clen(out)])
+		printable := make([]byte, 0, 10)
+		for i, v := range out {
+			if v == 0 {
+				break
+			}
+			switch {
+			case v == '\n':
+				printable = append(printable, '\\', 'n')
+			case v == '\r':
+				printable = append(printable, '\\', 'r')
+			case v == '\t':
+				printable = append(printable, '\\', 't')
+			case v >= ' ' && v <= '~':
+				printable = append(printable, v)
+			default:
+				printable = append(printable, []byte(fmt.Sprintf("\\%x", v))...)
+			}
+			if i > 124 {
+				printable = append(printable, []byte("...")...)
+				break
+			}
+		}
+		return "\"" + string(printable) + "\""
 	case "const struct sigaction __user *", "struct sigaction __user *":
 		return fmt.Sprintf("0x%x", argVal)
 	default:
