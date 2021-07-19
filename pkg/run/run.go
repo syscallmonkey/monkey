@@ -51,6 +51,7 @@ func RunTracer(config *smc.SyscallMonkeyConfig, manipulators []sc.SyscallManipul
 		if err != nil {
 			panic(err)
 		}
+		config.Pid = config.AttachPid
 	} else if config.TargetName != "" {
 		procs, err := ps.Processes()
 		if err != nil {
@@ -58,14 +59,14 @@ func RunTracer(config *smc.SyscallMonkeyConfig, manipulators []sc.SyscallManipul
 		}
 		for _, proc := range procs {
 			if proc.Executable() == config.TargetName {
-				config.AttachPid = proc.Pid()
+				config.Pid = proc.Pid()
 				break
 			}
 		}
-		if config.AttachPid == 0 {
+		if config.Pid == 0 {
 			panic(fmt.Errorf("No process found for name: %s (%d procs total)", config.TargetName, len(procs)))
 		}
-		err = sc.AttachToProcess(config.AttachPid)
+		err = sc.AttachToProcess(config.Pid)
 		if err != nil {
 			panic(err)
 		}
@@ -79,7 +80,7 @@ func RunTracer(config *smc.SyscallMonkeyConfig, manipulators []sc.SyscallManipul
 		if err != nil {
 			panic(err)
 		}
-		config.AttachPid = pid
+		config.Pid = pid
 	}
 
 	// read the config, if specified
@@ -93,7 +94,7 @@ func RunTracer(config *smc.SyscallMonkeyConfig, manipulators []sc.SyscallManipul
 		})
 	}
 
-	tracer := sc.NewTracer(config.AttachPid, config.OutputFile, manipulators)
+	tracer := sc.NewTracer(config.Pid, config.OutputFile, manipulators)
 
 	// trace the program until it finishes
 	tracer.Loop()

@@ -21,6 +21,7 @@ type SyscallMonkeyConfig struct {
 	TraceeStdin  io.Reader
 	TraceeStdout io.Writer
 	TraceeStderr io.Writer
+	Pid          int
 }
 
 func ParseCommandLineFlags(args []string) *SyscallMonkeyConfig {
