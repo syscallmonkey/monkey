@@ -20,5 +20,5 @@ RUN make bin/monkey
 FROM ubuntu:focal
 RUN apt-get update && apt-get install -y strace
 COPY --from=builder /w/bin/monkey /usr/bin/monkey
-COPY examples /examples
+COPY test/examples /examples
 ENTRYPOINT ["/usr/bin/monkey"]

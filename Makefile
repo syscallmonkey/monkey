@@ -23,10 +23,14 @@ push:
 run:
 	docker run --rm -ti --entrypoint /bin/bash --cap-add SYS_PTRACE -t $(tag)
 
+test:
+	docker build -t testing -f ./Dockerfile.test .
+	docker run --rm testing go test -v ./test
+
 clean:
 	rm -rf bin
 
 generate:
 	python3 build/generate.py > pkg/syscall/syscalls_linux.go
 
-.PHONY: clean build tag push run generate
+.PHONY: clean build tag push run generate test
