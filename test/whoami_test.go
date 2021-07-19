@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 	"testing"
 
@@ -76,4 +77,54 @@ func TestChangeGetUidReturnValue(t *testing.T) {
 	if modifiedOutput != modifiedUser {
 		t.Errorf("Expected '%s', got '%s' (%s)", modifiedUser, modifiedOutput, output.String())
 	}
+}
+
+func TestChangeEtcPasswd(t *testing.T) {
+
+	template := "%s:x:0:0:root:/root:/bin/bash\n"
+
+	var tests = []struct {
+		scenario, path string
+	}{
+		{"openat-etc-passwd.yml", "/tmp/passwd"},
+		{"openat-etc-passwd-short.yml", "/tmp/p"},
+		{"openat-etc-passwd-long.yml", "/tmp/pretty-long-passwd"},
+	}
+	for i, tt := range tests {
+		testname := fmt.Sprintf("Scenario %s (%s)", tt.scenario, tt.path)
+		t.Run(testname, func(t *testing.T) {
+
+			expectedUser := fmt.Sprintf("user-%d", i)
+			content := fmt.Sprintf(template, expectedUser)
+
+			// prep the file
+			err := ioutil.WriteFile(tt.path, []byte(content), 0644)
+			if err != nil {
+				t.Errorf("Error writing temp file %s: %v", tt.path, err)
+			}
+			defer func() {
+				err = os.Remove(tt.path)
+				if err != nil {
+					t.Errorf("Error deleting temp file %s: %v", tt.path, err)
+				}
+			}()
+
+			// check that running with the scenario it returns a different user
+			output := strings.Builder{}
+			config := smc.SyscallMonkeyConfig{
+				ConfigPath:   fmt.Sprintf("./examples/%s", tt.scenario),
+				TrailingArgs: []string{"whoami"},
+				Silent:       true,
+				TraceeStdout: &output,
+			}
+			smrun.RunTracer(&config, nil)
+
+			modifiedOutput := strings.TrimSpace(output.String())
+
+			if modifiedOutput != expectedUser {
+				t.Errorf("Expected '%s', got '%s' (%s)", expectedUser, modifiedOutput, output.String())
+			}
+		})
+	}
+
 }
